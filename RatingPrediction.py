@@ -11,8 +11,9 @@ import os
 directory = "./train/neg"
 x = []
 for file in os.listdir(directory):
-    print(file)
-    # with open("../train/neg/" + file, 'r') as f:
-        # x.append(f.read())
+    with open("./train/neg/" + file, 'r', encoding="Latin-1") as f:
+        x.append(f.read())
+        
+
         
         
