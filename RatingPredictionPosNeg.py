@@ -9,7 +9,12 @@ Predicts positive/negative
 import os
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.naive_bayes import MultinomialNB
+from sklearn.linear_model import SGDClassifier
+import numpy as np
 from sklearn.metrics import accuracy_score, precision_score, recall_score
+from sklearn.metrics import confusion_matrix
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 directory = "./train/neg"
 x_train = []
@@ -58,9 +63,27 @@ X_test_cv = cv.transform(x_test)
 # training ratings
 naive_bayes = MultinomialNB()
 naive_bayes.fit(X_train_cv, y_train)
-predictions = naive_bayes.predict(X_test_cv)
+predictions_nb = naive_bayes.predict(X_test_cv)
+
+svm = SGDClassifier().fit(X_train_cv, y_train)
+predicted_svm = svm.predict(X_test_cv)
 
 # testing ratings
-print('Accuracy score: ', accuracy_score(y_test, predictions))
-print('Precision score: ', precision_score(y_test, predictions))
-print('Recall score: ', recall_score(y_test, predictions))
+print('Naive Bayes Pos/Neg Accuracy score: ', accuracy_score(y_test, predictions_nb))
+print('SVM Pos/Neg Accuracy score: ', accuracy_score(y_test, predicted_svm))
+# print('Precision score: ', precision_score(y_test, predictions))
+# print('Recall score: ', recall_score(y_test, predictions))
+
+plt.figure()
+cm1 = confusion_matrix(y_test, predictions_nb)
+sns.heatmap(cm1, square=True, annot=True, cmap='RdBu', cbar=False, xticklabels=['Negative', 'Positive'], yticklabels=['Negative', 'Positive'])
+plt.title('Naive Bayes')
+plt.xlabel('true label')
+plt.ylabel('predicted label')
+
+plt.figure()
+cm2 = confusion_matrix(y_test, predicted_svm)
+sns.heatmap(cm2, square=True, annot=True, cmap='RdBu', cbar=False, xticklabels=['Negative', 'Positive'], yticklabels=['Negative', 'Positive'])
+plt.title('SVM')
+plt.xlabel('true label')
+plt.ylabel('predicted label')
