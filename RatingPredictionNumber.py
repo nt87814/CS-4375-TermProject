@@ -17,6 +17,7 @@ from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
 import seaborn as sns
 from collections import defaultdict
+from sklearn import metrics
 
 def read_data():
     
@@ -148,3 +149,9 @@ if __name__ == '__main__':
     print(np.mean(predicted_svm == y_test))
     ind_accuracies(y_test, predicted_nb, predicted_svm)
     test_range(y_test, predicted_nb, predicted_svm)
+    print("Naive Bayes")
+    print(metrics.confusion_matrix(y_test, predicted_nb))
+    print(metrics.classification_report(y_test, predicted_nb, digits=3))
+    print("SVM")
+    print(metrics.confusion_matrix(y_test, predicted_svm))
+    print(metrics.classification_report(y_test, predicted_svm, digits=3))
